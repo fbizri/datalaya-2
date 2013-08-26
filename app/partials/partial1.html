@@ -1,0 +1,28 @@
+<div ng-controller="MainCtrl">
+  <div class="omnibar-container row-fluid well">
+    <div class="span2"></div>
+    <div class="omnibar span8">
+      <textarea type="text" ng-model="omni" ng-change="receivePaste()"></textarea>{{receivedPaste}} - {{omni}}
+    </div>
+    <div class="span2"></div>
+  </div>
+
+  <div class="list-container row-fluid">
+      <div class="list-body span6">
+
+        <!--
+        do a ul and ng-repeat here of each item. An item is a link
+        with title, cleaned url, description, tags, and is clickable
+        -->
+        <ul class="thumbnails">
+          <li ng-repeat="item in items">
+            <h6>{{item.title}}</h6>
+            <b>{{item.link}}</b>
+            <p>{{item.desc}}</p>
+            <span class="label label-info" ng-repeat="tag in item.tags">{{tag}}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="info-bar span6"></div> 
+  </div>
+</div>
