@@ -2,7 +2,7 @@
   <div class="omnibar-container row-fluid well">
     <div class="span2"></div>
     <div class="omnibar span8">
-      <textarea type="text" ng-model="omni" ng-change="receivePaste()"></textarea>{{receivedPaste}} - {{omni}}
+      <textarea type="text" ng-model="omni" ng-blur="receivePaste()"></textarea>
     </div>
     <div class="span2"></div>
   </div>
@@ -23,6 +23,7 @@
           </li>
         </ul>
       </div>
+      {{items | json}}
       <div class="info-bar span6"></div> 
   </div>
 </div>
