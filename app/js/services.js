@@ -32,4 +32,11 @@ angular.module('fadi2.services', [])
     };
 
 	return userData;
+}])
+.factory('appState', [function () {
+    return {
+        model: {
+            omniBoxState: 'neutral'
+        }
+    }
 }]);
