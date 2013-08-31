@@ -35,6 +35,8 @@ angular.module('fadi2.services', [])
 	return userData;
 }])
 .factory('appState', [function () {
+    /*Factory that maintains the app's various states*/
+
     var omniBoxState = {};
     omniBoxState.state = "neutral";
     omniBoxState.getState = function () {
@@ -44,14 +46,9 @@ angular.module('fadi2.services', [])
     omniBoxState.setState = function (state) {
         omniBoxState.state = state;
     }
-
     return omniBoxState;
+}])
+.factory ('urlPreviewer', [function () {
+    /*Factory that gets the fetches the metadata of any user-submitted link*/
 
-    /*
-    return {
-        model: {
-            omniBoxState: 'neutral'
-        }
-    }
-    */
 }]);
