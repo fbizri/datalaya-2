@@ -5,7 +5,7 @@
 angular.module('fadi2.services', [])
 .factory('userServerData', [function () {
 	
-	/*Get user's saved items from the server, now hardocded below*/
+	/*Get user's saved items from the server, now hardcoded below*/
 	var items = [
       {
         "linkId":"1",
@@ -35,8 +35,18 @@ angular.module('fadi2.services', [])
 	return userData;
 }])
 .factory('appState', [function () {
-    var omniBoxState = 'neutral';
+    var omniBoxState = {};
+    omniBoxState.state = "neutral";
+    omniBoxState.getState = function () {
+            return omniBoxState.state;
+    }
+    
+    omniBoxState.setState = function (state) {
+        omniBoxState.state = state;
+    }
+
     return omniBoxState;
+
     /*
     return {
         model: {

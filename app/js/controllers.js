@@ -8,7 +8,7 @@ angular.module('fadi2.controllers', [])
     //listing-related stuff, all obtain from the userServerData factory
     $scope.items = userServerData.getData();
     $scope.command="no command";
-    $scope.state = appState.omniBoxState;
+    $scope.state = appState.getState();
     $scope.entry = "no entry";
 
     /*This function receives user's input thrown into the omni box. 
