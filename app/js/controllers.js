@@ -11,21 +11,16 @@ angular.module('fadi2.controllers', [])
     $scope.state = appState.omniBoxState;
     $scope.entry = "no entry";
 
-
-
-    /*This function receives users input thrown into the omni box. 
+    /*This function receives user's input thrown into the omni box. 
       Sanitize, analyze and then do somethng with it*/
       $scope.receivePaste = function() {
         var i = $scope.omni;
 
-        if ( i==="*w" ) {
-          $scope.command = "*w detected!";
+        if ( i==="/w" ) {
+          $scope.command = "w detected!";
           $scope.state = appState.omniBoxState ="writing text post";                
         }
 
-        if ()
-
-          
           /*
           $scope.items.push({
           "linkId":"3",
@@ -39,7 +34,7 @@ angular.module('fadi2.controllers', [])
       };
 
       function newTextEntry (i) {
-        return i.replace('*w', '');
+        return i.replace('/w', '');
       }
 
   }]);

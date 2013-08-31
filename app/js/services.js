@@ -19,7 +19,7 @@ angular.module('fadi2.services', [])
         "linkId":"2",
         "title":"title2",
         "link":"http://facebook.com/useless1/useless2/showthis20130101.html",
-        "desc":"As Goku saw his oldest friend explode into dust by the hand of the evil murdere Freeza, a huge swell of anger rose within him. So grave was it that he felt his consciousness leave him, and instead give way to rage pure rage",          
+        "desc":"As Goku saw his oldest friend explode into dust by the hand of the evil murderer Freeza, a huge swell of anger rose within him. So grave was it that he felt his consciousness leave him, and instead give way to rage pure rage",          
         "tags":["tag4","tag5","tag6"],
         "fav":false
       }
@@ -27,6 +27,7 @@ angular.module('fadi2.services', [])
 
     /*userData is the local object containing all current saved user data*/
     var userData = {};
+
     userData.getData = function () {
     	return items;
     };
@@ -34,9 +35,13 @@ angular.module('fadi2.services', [])
 	return userData;
 }])
 .factory('appState', [function () {
+    var omniBoxState = 'neutral';
+    return omniBoxState;
+    /*
     return {
         model: {
             omniBoxState: 'neutral'
         }
     }
+    */
 }]);
