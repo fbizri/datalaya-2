@@ -3,10 +3,15 @@
 /* Services */
 
 angular.module('fadi2.services', [])
-.factory('userServerData', [function () {
+.factory('userServerData', ['$http', function ($http) {
 	
-	/*Get user's saved items from the server, now hardcoded below*/
-	var items = [
+     /*userData is the local object containing all current saved user data*/
+    var userData = {};
+    userData.items ={};
+    userData.newData = false;
+
+	/*Get user's saved items from the server, now hardcoded below
+	items = [
       {
         "linkId":"1",
         "title":"title1",
@@ -24,15 +29,30 @@ angular.module('fadi2.services', [])
         "fav":false
       }
     ];
+    */
 
-    /*userData is the local object containing all current saved user data*/
-    var userData = {};
-
-    userData.getData = function () {
-    	return items;
+    userData.retrieveRemoteData = function () {
+        return $http.get('https://api.mongohq.com/databases/datalaya-db-1/collections/links/documents?_apikey=csximh8vo2kd40en5la8')
+        .then(function(data){
+            userData.setData (data);
+            //userData.getData();
+            console.log("called .then in factory");
+            return userData.items;
+        });
     };
 
-	return userData;
+    userData.getData = function () {
+    	console.log("getData called");
+        console.log(userData.items);
+        return userData.items;
+    };
+
+    userData.setData = function (data){
+        return userData.items = data;
+    };
+
+    return userData;
+
 }])
 .factory('appState', [function () {
     /*Factory that maintains the app's various states*/
@@ -49,6 +69,6 @@ angular.module('fadi2.services', [])
     return omniBoxState;
 }])
 .factory ('urlPreviewer', [function () {
-    /*Factory that gets the fetches the metadata of any user-submitted link*/
+    /*Factory that remotelyt fetches the metadata of any user-submitted link*/
 
 }]);
