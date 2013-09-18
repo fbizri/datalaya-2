@@ -50,4 +50,19 @@ angular.module('fadi2.controllers', [])
       console.log($scope.items);
     };
 
+    $scope.processNewItem = function () {
+      console.log("before:" + $scope.newItem.tags);
+      $scope.newItem.tags = $scope.newItem.tags.split(",");
+      console.log("after:" + $scope.newItem.tags[2]);
+      $scope.items.push({
+        "linkId":'na',
+        "title":$scope.newItem.title,
+        "link":$scope.newItem.link,
+        "desc":$scope.newItem.desc,
+        "tags":$scope.newItem.tags,
+        "fav":$scope.newItem.fav
+      });
+      $scope.items.reverse();
+    };
+
   }]);

@@ -11,6 +11,16 @@
     <button ng-click="getLocalData()" class="btn">Get User Data</button>
   </div>
 
+  <!--Enter new item-->
+  <div class="row-fluid">
+    <textarea type="text" ng-model="newItem.title"></textarea>
+    <textarea type="text" ng-model="newItem.link"></textarea>
+    <textarea type="text" ng-model="newItem.desc"></textarea>
+    <textarea type="text" ng-model="newItem.tags"></textarea>
+    <textarea type="text" ng-model="newItem.fav"></textarea>
+    <button ng-click="processNewItem()" class="btn">Save</button>
+  </div>
+
   <div class="list-container row-fluid">
       <div class="list-body span6">
 
