@@ -3,7 +3,7 @@
 /* Controllers */
 
 angular.module('fadi2.controllers', [])
-  .controller('MainCtrl', ['$scope', 'userServerData', 'appState', function ($scope, userServerData, appState) {	
+  .controller('MainCtrl', ['$scope', 'userServerData', 'appState', 'urlPreviewer', function ($scope, userServerData, appState, urlPreviewer) {	
 
     //Initialize 
     $scope.command="no command";
@@ -50,19 +50,43 @@ angular.module('fadi2.controllers', [])
       console.log($scope.items);
     };
 
+    /*New data coming in from url analyzed. Sanitize it just in case,then
+    call function that sends new data to db*/
     $scope.processNewItem = function () {
-      console.log("before:" + $scope.newItem.tags);
+      
+      //TODO: SANITIZE
+      /*Split tags appropriately*/
       $scope.newItem.tags = $scope.newItem.tags.split(",");
-      console.log("after:" + $scope.newItem.tags[2]);
+      
+      //if factory service that pushed new data into db is successful, push this item into view
+      if (sendNewItemToDb($scope.newItem)) {
+        pushNewItemIntoView();
+      }
+               
+    };
+
+    function sendNewItemToDb(newItem) {
+      //call function in userServerData factory
+      return userServerData.sendNewItemToDb(newItem);
+    };
+
+    /*On success of new item saved in remote db, 
+    push the new item into the local list, to show in the view*/
+    function pushNewItemIntoView() {       
       $scope.items.push({
-        "linkId":'na',
+        "linkId": $scope.newItem.title,
         "title":$scope.newItem.title,
         "link":$scope.newItem.link,
         "desc":$scope.newItem.desc,
         "tags":$scope.newItem.tags,
         "fav":$scope.newItem.fav
       });
-      $scope.items.reverse();
-    };
+    }
+
+    $scope.getUrlData = function (url) {
+      console.log("in getUrlData controller");
+      var metadata = urlPreviewer.retrieveRemoteData(url);
+      console.log(metadata);
+    }
 
   }]);

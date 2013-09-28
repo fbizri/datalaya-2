@@ -8,7 +8,8 @@
   </div>
 
   <div class="row-fluid">
-    <button ng-click="getLocalData()" class="btn">Get User Data</button>
+    <input type="text" ng-model="myLink" ></input>
+    <button ng-click="getUrlData(myLink)" class="btn">Get link preview</button>
   </div>
 
   <!--Enter new item-->
@@ -29,7 +30,7 @@
         with title, cleaned url, description, tags, and is clickable
         -->
         <ul class="thumbnails">
-          <li ng-repeat="item in items">
+          <li ng-repeat="item in items | orderBy:'linkId'">
             <h6>{{item.title}}</h6>
             <b>{{item.link}}</b>
             <p>{{item.desc}}</p>

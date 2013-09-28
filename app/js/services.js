@@ -33,10 +33,10 @@ angular.module('fadi2.services', [])
 
     userData.retrieveRemoteData = function () {
         return $http.get('https://api.mongohq.com/databases/datalaya-db-1/collections/links/documents?_apikey=csximh8vo2kd40en5la8')
-        .then(function(data){
+        .success(function(data){
             userData.setData (data);
             //userData.getData();
-            console.log("called .then in factory");
+            //console.log("called .then in factory");
             return userData.items;
         });
     };
@@ -51,11 +51,27 @@ angular.module('fadi2.services', [])
         return userData.items = data;
     };
 
+    /*Send new item to db. On Success return true, otherwise return false.*/
+    userData.sendNewItemToDb = function (data) {
+        
+        data = '{"document":' +  JSON.stringify(data) + ', "safe": false}';
+         return $http.post('https://api.mongohq.com/databases/datalaya-db-1/collections/links/documents?_apikey=csximh8vo2kd40en5la8', data)
+        .success(function(){
+            return true;
+        })
+        .error(function(){
+            console.log("Error in data push to db");
+            return false;
+        });
+
+    }
+
+    /*returning the object of this factory*/
     return userData;
 
 }])
 .factory('appState', [function () {
-    /*Factory that maintains the app's various states*/
+/*Factory that maintains the app's various states*/
 
     var omniBoxState = {};
     omniBoxState.state = "neutral";
@@ -68,7 +84,21 @@ angular.module('fadi2.services', [])
     }
     return omniBoxState;
 }])
-.factory ('urlPreviewer', [function () {
-    /*Factory that remotelyt fetches the metadata of any user-submitted link*/
+.factory ('urlPreviewer', ['$http', function ($http) {
+/*Factory that remotelyt fetches the metadata of any user-submitted link*/   
+    
+    var linkMetadata = {};
+    
+    linkMetadata.retrieveRemoteData = function (url) {
+        url = "lib/link-previewer/proxy.php?url=" + encodeURIComponent(url);
+        return $http.get(url)
+        .success(function(data){
+            console.log ("In the Factory:");
+            console.log(data);
+            return data;
+        });
+    };
+
+    return linkMetadata;
 
 }]);

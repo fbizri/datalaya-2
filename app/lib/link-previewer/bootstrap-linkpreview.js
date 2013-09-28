@@ -43,6 +43,7 @@
     var LinkPreview = function(element, options) {
         this.init(element, options);
     };
+
     
     LinkPreview.prototype = {
         constructor: LinkPreview,
@@ -53,6 +54,8 @@
         $element: null,
         $previewContainer: null,
         $refreshButton: null,
+
+
 
         init: function(element, options) {
 
