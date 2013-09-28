@@ -93,8 +93,8 @@ angular.module('fadi2.services', [])
         url = "lib/link-previewer/proxy.php?url=" + encodeURIComponent(url);
         return $http.get(url)
         .success(function(data){
-            console.log ("In the Factory:");
-            console.log(data);
+            //console.log ("In the Factory:");
+            //console.log(data);
             return data;
         });
     };

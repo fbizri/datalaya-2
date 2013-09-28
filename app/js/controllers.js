@@ -10,13 +10,14 @@ angular.module('fadi2.controllers', [])
     $scope.state = appState.getState();
     $scope.entry = "no entry";
      
-    //Get saved links from remote server
+    //Get saved links from remote server and bind them to $scope.items
     userServerData.retrieveRemoteData().then(function(d){
       //console.log("called then in controller");
       $scope.items = d.data;
       //console.log($scope.items);
     });
    
+
 
     /*This function receives user's input thrown into the omni box. 
     Sanitize, analyze and then do somethng with it*/
@@ -83,10 +84,14 @@ angular.module('fadi2.controllers', [])
       });
     }
 
+    //Call factory service UrlPreviwer, get the metadata and bind it to $scope
     $scope.getUrlData = function (url) {
       console.log("in getUrlData controller");
-      var metadata = urlPreviewer.retrieveRemoteData(url);
-      console.log(metadata);
+
+      urlPreviewer.retrieveRemoteData(url).then(function(d){
+      $scope.metadata = d.data;
+      console.log($scope.metadata);
+      });
     }
 
   }]);
