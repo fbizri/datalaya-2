@@ -12,11 +12,12 @@ angular.module('fadi2.controllers', [])
      
     //Get saved links from remote server and bind them to $scope.items
     userServerData.retrieveRemoteData().then(function(d){
-      //console.log("called then in controller");
-      $scope.items = d.data;
-      //console.log($scope.items);
+    $scope.items = d.data;
+    //console.log($scope.items);
     });
    
+    //empty user input (could be a url, text, or url and text combo)
+    $scope.newItem = {};
 
 
     /*This function receives user's input thrown into the omni box. 
@@ -51,17 +52,31 @@ angular.module('fadi2.controllers', [])
       console.log($scope.items);
     };
 
-    /*New data coming in from url analyzed. Sanitize it just in case,then
+    /*New data coming in from user input (url + text combo). Sanitize it,then
     call function that sends new data to db*/
-    $scope.processNewItem = function () {
+    function processNewItem (item) {
       
-      //TODO: SANITIZE
+      var newItem = {};
+      //TODO: SANITIZE this data
+
       /*Split tags appropriately*/
-      $scope.newItem.tags = $scope.newItem.tags.split(",");
+      if (item.keywords!="") {
+        newItem.tags = item.keywords.split(",");
+      }
+
+      if (item.title!="") {
+        newItem.title = item.title;
+      }
+
+      if (item.description!="") {
+        newItem.desc = item.description;
+      }
+
+      //console.log (newItem.title + ' ' + newItem.tags);
       
       //if factory service that pushed new data into db is successful, push this item into view
-      if (sendNewItemToDb($scope.newItem)) {
-        pushNewItemIntoView();
+      if (sendNewItemToDb(newItem)) {
+        pushNewItemIntoView(newItem);
       }
                
     };
@@ -73,7 +88,8 @@ angular.module('fadi2.controllers', [])
 
     /*On success of new item saved in remote db, 
     push the new item into the local list, to show in the view*/
-    function pushNewItemIntoView() {       
+    function pushNewItemIntoView(item) {       
+      /*
       $scope.items.push({
         "linkId": $scope.newItem.title,
         "title":$scope.newItem.title,
@@ -82,15 +98,15 @@ angular.module('fadi2.controllers', [])
         "tags":$scope.newItem.tags,
         "fav":$scope.newItem.fav
       });
+      */
+      $scope.items.push(item);
     }
 
     //Call factory service UrlPreviwer, get the metadata and bind it to $scope
     $scope.getUrlData = function (url) {
-      console.log("in getUrlData controller");
-
       urlPreviewer.retrieveRemoteData(url).then(function(d){
-      $scope.metadata = d.data;
-      console.log($scope.metadata);
+      processNewItem (d.data);
+      console.log(d.data);
       });
     }
 
