@@ -11,27 +11,11 @@
     <input type="text" ng-model="myLink" ></input>
     <button ng-click="getUrlData(myLink)" class="btn">Get link preview</button>
   </div>
-  
-
-  <!--Enter new item-->
-  <div class="row-fluid">
-    <textarea type="text" ng-model="newItem.title"></textarea>
-    <textarea type="text" ng-model="newItem.link"></textarea>
-    <textarea type="text" ng-model="newItem.desc"></textarea>
-    <textarea type="text" ng-model="newItem.tags"></textarea>
-    <textarea type="text" ng-model="newItem.fav"></textarea>
-    <button ng-click="processNewItem()" class="btn">Save</button>
-  </div>
 
   <div class="list-container row-fluid">
       <div class="list-body span6">
-
-        <!--
-        do a ul and ng-repeat here of each item. An item is a link
-        with title, cleaned url, description, tags, and is clickable
-        -->
         <ul class="thumbnails">
-          <li ng-repeat="item in items | orderBy:'linkId'">
+          <li ng-repeat="item in items | orderBy:'linkId' | filter:omni">
             <h6>{{item.title}}</h6>
             <b>{{item.link}}</b>
             <p>{{item.desc}}</p>

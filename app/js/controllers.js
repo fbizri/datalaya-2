@@ -52,23 +52,23 @@ angular.module('fadi2.controllers', [])
       console.log($scope.items);
     };
 
-    /*New data coming in from user input (url + text combo). Sanitize it,then
-    call function that sends new data to db*/
-    function processNewItem (item) {
+    /*prepare data received after url analysis and push it to db*/
+    function processNewItem (item, url) {
       
       var newItem = {};
-      //TODO: SANITIZE this data
+
+      newItem.link = url;
 
       /*Split tags appropriately*/
-      if (item.keywords!="") {
+      if (typeof item.keywords !== 'undefined' && item.keywords!="") {
         newItem.tags = item.keywords.split(",");
       }
 
-      if (item.title!="") {
+      if (typeof item.title !== 'undefined' && item.title!="") {
         newItem.title = item.title;
       }
 
-      if (item.description!="") {
+      if (typeof item.description !== 'undefined' && item.description!="") {
         newItem.desc = item.description;
       }
 
@@ -104,10 +104,19 @@ angular.module('fadi2.controllers', [])
 
     //Call factory service UrlPreviwer, get the metadata and bind it to $scope
     $scope.getUrlData = function (url) {
-      urlPreviewer.retrieveRemoteData(url).then(function(d){
-      processNewItem (d.data);
-      console.log(d.data);
-      });
+
+      if (validateURL (url)) {
+        urlPreviewer.retrieveRemoteData(url).then(function(d){
+          processNewItem (d.data, url);
+        });
+      }
+      else {
+        console.log("invalid url detected");
+      }
+    }
+
+    function validateURL(value) {
+    return /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
     }
 
   }]);
