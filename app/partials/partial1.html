@@ -6,22 +6,21 @@
     </div>
     <div class="span2"></div>
   </div>
-
+  <button class="close" ng-click="deleteItemInDb('5241ca843db046000200c898')">x</button>
   <div class="row-fluid">
     <input type="text" ng-model="myLink" ></input>
     <button ng-click="getUrlData(myLink)" class="btn">Get link preview</button>
   </div>
-
-  <div class="list-container row-fluid">
-      <div class="list-body span6">
-        <ul class="thumbnails">
-          <li ng-repeat="item in items | orderBy:'linkId' | filter:omni">
-            <h6>{{item.title}}</h6>
-            <b>{{item.link}}</b>
-            <p>{{item.desc}}</p>
-            <span class="label label-info" ng-repeat="tag in item.tags">{{tag}}</span>
-          </li>
-        </ul>
+  <div class="row-fluid">
+      <div class="span6">
+          <div class="row-fluid" ng-repeat="item in items | orderBy:'title' | filter:omni">
+                <div><h6>{{item.title}}</h6></div>
+                <button class="close" ng-click="$parent.deleteItemInDb(item._id.$oid)">x</button>
+                <b><a href="{{item.link}}" target="blank_">Link</a></b>
+                <p>{{item.desc}}</p>
+                <span class="label label-info" ng-repeat="tag in item.tags">{{tag}}</span>
+          </div>
+        
       </div>
       <div class="info-bar span6"></div> 
   </div>

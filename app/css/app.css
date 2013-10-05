@@ -40,3 +40,7 @@
 li {
   clear:both;
 }
+
+.delete-link {
+  display: inline-block;
+}

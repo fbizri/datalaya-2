@@ -37,6 +37,7 @@ angular.module('fadi2.services', [])
             userData.setData (data);
             //userData.getData();
             //console.log("called .then in factory");
+            console.log(userData.items);
             return userData.items;
         });
     };
@@ -64,6 +65,22 @@ angular.module('fadi2.services', [])
             return false;
         });
 
+    }
+
+    /*Function to delete an item in the remote db*/
+    userData.deleteItemInDb = function (itemId) {
+        var dbLink1 = 'https://api.mongohq.com/databases/datalaya-db-1/collections/links/documents/';
+        var dbLink2 ='?_apikey=csximh8vo2kd40en5la8';
+        console.log("deleting id: " + itemId);
+        return $http({'method':'DELETE', 'url':dbLink1+itemId+dbLink2})
+        .success(function(){
+            console.log("Successful delete");
+            return true;
+        })
+        .error(function(){
+            console.log("Error deleting");
+            return false;
+        });
     }
 
     /*returning the object of this factory*/
