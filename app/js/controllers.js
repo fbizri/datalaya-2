@@ -67,7 +67,7 @@ angular.module('fadi2.controllers', [])
         /*delete at db was successful, now remove item from view*/
         for (var i = 0, len = $scope.items.length; i < len; ++i) {
           if ( $scope.items[i].itemId == itemId ) {
-            console.log("deleting item id:" + itemId);
+            console.log("deleting from view the item id:" + itemId);
             $scope.items.splice(i,1);
             console.log($scope.items);
             break;

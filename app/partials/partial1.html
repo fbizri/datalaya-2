@@ -9,7 +9,7 @@
 	
 	<div class="row-fluid">
 			<div class="span6">
-				<div class="row-fluid" ng-repeat="item in items | orderBy:'title' | filter:omni">
+				<div class="row-fluid" ng-repeat="item in items | orderBy:'itemId'">
 					<div><h6>{{item.title}}</h6></div>
 					<button class="close" ng-click="$parent.deleteItemInDb(item.itemId)">x</button>
 					<b><a href="{{item.mainLink}}" target="blank_">Link</a></b>
