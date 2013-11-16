@@ -1,27 +1,27 @@
 <div ng-controller="MainCtrl">
-  <div class="omnibar-container row-fluid well">
-    <div class="span2"></div>
-    <div class="omnibar span8">
-      <textarea type="text" ng-model="omni" ng-change="receivePaste()"></textarea>{{command}} - {{state}} - {{entry}}
-    </div>
-    <div class="span2"></div>
-  </div>
-  <button class="close" ng-click="deleteItemInDb('5241ca843db046000200c898')">x</button>
-  <div class="row-fluid">
-    <input type="text" ng-model="myLink" ></input>
-    <button ng-click="getUrlData(myLink)" class="btn">Get link preview</button>
-  </div>
-  <div class="row-fluid">
-      <div class="span6">
-          <div class="row-fluid" ng-repeat="item in items | orderBy:'title' | filter:omni">
-                <div><h6>{{item.title}}</h6></div>
-                <button class="close" ng-click="$parent.deleteItemInDb(item._id.$oid)">x</button>
-                <b><a href="{{item.link}}" target="blank_">Link</a></b>
-                <p>{{item.desc}}</p>
-                <span class="label label-info" ng-repeat="tag in item.tags">{{tag}}</span>
-          </div>
-        
-      </div>
-      <div class="info-bar span6"></div> 
-  </div>
+ 
+	<div class="row-fluid well omnibar">
+		<div class="prompt"><textarea type="text" ng-model="userInput" class="cmdLine flicker"></textarea></div>
+		<!-- <button ng-click="getUrlData(userInput)" class="btn">Get link preview</button> -->
+		<button ng-click="parseOmnibox(userInput)" class="btn">Get link preview</button>
+		
+	</div>
+	
+	<div class="row-fluid">
+			<div class="span6">
+				<div class="row-fluid" ng-repeat="item in items | orderBy:'title' | filter:omni">
+					<div><h6>{{item.title}}</h6></div>
+					<button class="close" ng-click="$parent.deleteItemInDb(item.itemId)">x</button>
+					<b><a href="{{item.mainLink}}" target="blank_">Link</a></b>
+					<p><b>DESC:</b>{{item.desc}}</p>
+					<p>{{item.userText}}</p>
+					<ul ng-repeat="note in notes"><b>NOTES:</b>
+
+					</ul>
+					<span class="label label-info" ng-repeat="tag in item.tags">{{tag}}</span>
+				</div>
+			</div>
+			<div class="info-bar span6"></div> 
+	</div>
+
 </div>

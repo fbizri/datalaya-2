@@ -20,28 +20,6 @@ angular.module('fadi2.controllers', [])
     $scope.newItem = {};
 
 
-    /*This function receives user's input thrown into the omni box. 
-    Sanitize, analyze and then do somethng with it*/
-    $scope.receivePaste = function() {
-      var i = $scope.omni;
-
-      if ( i==="/w" ) {
-        $scope.command = "w detected!";
-        $scope.state = appState.omniBoxState ="writing text post";                
-      }
-
-        /*
-        $scope.items.push({
-        "linkId":"3",
-        "title":"title3",
-        "link":"http://facebook.com/useless1/useless2/showthis20130101.html",
-        "desc":"blablabla  so did the hand of the violinist who was deeply engrossed in the final stages of Mozart's 21st concerto (andante)",
-        "tags":["tag1","tag2","tag3"],
-        "fav":false});
-        $scope.items.reverse();
-        */
-    };
-
     function newTextEntry (i) {
       return i.replace('/w', '');
     }
@@ -52,39 +30,9 @@ angular.module('fadi2.controllers', [])
       console.log($scope.items);
     };
 
-    /*prepare data received after url analysis and push it to db*/
-    function processNewItem (item, url) {
-      
-      var newItem = {};
-
-      newItem.link = url;
-
-      newItem.itemId = $scope.items.length + 1;
-
-      /*Split tags appropriately*/
-      if (typeof item.keywords !== 'undefined' && item.keywords!="") {
-        newItem.tags = item.keywords.split(",");
-      }
-
-      if (typeof item.title !== 'undefined' && item.title!="") {
-        newItem.title = item.title;
-      }
-
-      if (typeof item.description !== 'undefined' && item.description!="") {
-        newItem.desc = item.description;
-      }
-
-      //console.log (newItem.title + ' ' + newItem.tags);
-      
-      //if factory service that pushed new data into db is successful, push this item into view
-      if (sendNewItemToDb(newItem)) {
-        pushNewItemIntoView(newItem);
-      }
-               
-    };
 
     function sendNewItemToDb(newItem) {
-      //call function in userServerData factory
+        //call function in userServerData factory
       return userServerData.sendNewItemToDb(newItem);
     };
 
@@ -95,7 +43,7 @@ angular.module('fadi2.controllers', [])
       $scope.items.push({
         "linkId": $scope.newItem.title,
         "title":$scope.newItem.title,
-        "link":$scope.newItem.link,
+        "link":$scope.newItem.mainLink,
         "desc":$scope.newItem.desc,
         "tags":$scope.newItem.tags,
         "fav":$scope.newItem.fav
@@ -104,22 +52,12 @@ angular.module('fadi2.controllers', [])
       $scope.items.push(item);
     }
 
-    //Call factory service UrlPreviwer, get the metadata and bind it to $scope
-    $scope.getUrlData = function (url) {
-
-      if (validateURL (url)) {
-        urlPreviewer.retrieveRemoteData(url).then(function(d){
-          processNewItem (d.data, url);
-        });
-      }
-      else {
-        console.log("invalid url detected");
-      }
-    }
-
+   
+    /*Validate a url string, otherwise return false (or maybe null?)*/
     function validateURL(value) {
       return /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
     }
+
 
     /*Function to delete item in remote DB*/
     $scope.deleteItemInDb = function (itemId) {
@@ -128,7 +66,7 @@ angular.module('fadi2.controllers', [])
         
         /*delete at db was successful, now remove item from view*/
         for (var i = 0, len = $scope.items.length; i < len; ++i) {
-          if ( $scope.items[i]._id.$oid == itemId ) {
+          if ( $scope.items[i].itemId == itemId ) {
             console.log("deleting item id:" + itemId);
             $scope.items.splice(i,1);
             console.log($scope.items);
@@ -136,7 +74,99 @@ angular.module('fadi2.controllers', [])
           }
         }
       } 
-    } 
+    }
+
+
+    /*Functions to parse the text that a user enters in the omnibox*/
+    $scope.parseOmnibox = function (userInput) {
+
+        //var urlPattern = /(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)$/ig;  
+        var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+        urlRegex = new RegExp (urlRegex);
+
+        //parse for urls, return array of them if found and then remove it from main text
+        var urlArray = userInput.match(urlRegex);
+      
+        if (urlArray) {
+            var l = urlArray.length;
+            for (var i = 0; i < l; i++) {
+                userInput = userInput.replace(urlArray[i], "");    
+            }
+        }
+
+        console.log("urlArray: " + urlArray);      
+
+        //parse for commands (i.e. tags) and extract them and remove from main text
+        var tagIndex = userInput.indexOf("\/t ");
+        var tagArray = new Array();
+
+        if (tagIndex !== -1) {
+            tagArray = userInput.substr(tagIndex).replace("\/t ", "").split(" ");
+            userInput = userInput.replace(userInput.substr(tagIndex), "");
+          
+            console.log("tagArray=: " + tagArray);
+        }
+
+        //remaining text gets split by new lines into an array of 'notes'
+        console.log("cleaned text: " + userInput);
+
+        //start creating new item object
+        $scope.newItem = {};
+
+        //create new item's id (using the current date, in milliseconds. Will there be cases of ducpliate IDs?)
+        $scope.newItem.itemId = new Date().getTime().toString();
+        $scope.newItem.dateCreated = new Date().getTime();
+
+        //TODO need to sanitize user text first
+        $scope.newItem.userText = userInput;
+        $scope.newItem.userUrlList = urlArray;
+        $scope.newItem.tags = tagArray;    
+
+        //default empty values for remotely fetched metadata
+        $scope.newItem.mainLink = "(no main url)";
+        $scope.newItem.title = "(no title)";
+        $scope.newItem.desc = "(no desc)";
+
+        //now take first url found, if any, and go get its metadata
+        if (urlArray && validateURL (urlArray[0])) {
+        
+            //Initiate the main url metadata and bind them to the http service
+            $scope.newItem.mainLink = urlArray[0];  
+
+            //need to call 
+            urlPreviewer.retrieveRemoteData($scope.newItem.mainLink).then(function(d){
+                //TODO the first function within a then() call is for success. need to to for failure too
+                console.log("remote metadata returned: ");
+                console.log (d.data);
+
+                if (typeof d.data.title !== 'undefined' && d.data.title!="") {
+                  $scope.newItem.title = d.data.title;
+                }
+
+                if (typeof d.data.description !== 'undefined' && d.data.description!="") {
+                  $scope.newItem.desc = d.data.description;
+                }
+
+                /*Split remotely fetched metatags appropriately and merge with user added tags*/
+                if (typeof d.data.keywords !== 'undefined' && d.data.keywords!="") {
+                  var remoteTags = d.data.keywords.split(",");
+                  $scope.newItem.tags = tagArray.concat(remoteTags);
+                }
+                
+                return true;
+            });  
+        } 
+
+        console.log("new Item contains:");
+        console.log ($scope.newItem);
+
+    //now push it into db, then update view
+    //if factory service that pushed new data into db is successful, push this item into view
+    if (sendNewItemToDb($scope.newItem)) {
+        pushNewItemIntoView($scope.newItem);
+    }
+
     
+    }//end of parseOmnibox
 
   }]);

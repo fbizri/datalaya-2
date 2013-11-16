@@ -32,7 +32,7 @@ angular.module('fadi2.services', [])
     */
 
     userData.retrieveRemoteData = function () {
-        return $http.get('https://api.mongohq.com/databases/datalaya-db-1/collections/links/documents?_apikey=csximh8vo2kd40en5la8')
+        return $http.get('https://api.mongohq.com/databases/datalaya-db-1/collections/links/documents?_apikey=iEU4t3qDQs9WtgklYE8ByWD9T3JgVuR4893Z5Ecyc')
         .success(function(data){
             userData.setData (data);
             //userData.getData();
@@ -56,7 +56,7 @@ angular.module('fadi2.services', [])
     userData.sendNewItemToDb = function (data) {
         
         data = '{"document":' +  JSON.stringify(data) + ', "safe": false}';
-         return $http.post('https://api.mongohq.com/databases/datalaya-db-1/collections/links/documents?_apikey=csximh8vo2kd40en5la8', data)
+         return $http.post('https://api.mongohq.com/databases/datalaya-db-1/collections/links/documents?_apikey=iEU4t3qDQs9WtgklYE8ByWD9T3JgVuR4893Z5Ecyc', data)
         .success(function(){
             return true;
         })
@@ -70,7 +70,7 @@ angular.module('fadi2.services', [])
     /*Function to delete an item in the remote db*/
     userData.deleteItemInDb = function (itemId) {
         var dbLink1 = 'https://api.mongohq.com/databases/datalaya-db-1/collections/links/documents/';
-        var dbLink2 ='?_apikey=csximh8vo2kd40en5la8';
+        var dbLink2 ='?_apikey=iEU4t3qDQs9WtgklYE8ByWD9T3JgVuR4893Z5Ecyc';
         console.log("deleting id: " + itemId);
         return $http({'method':'DELETE', 'url':dbLink1+itemId+dbLink2})
         .success(function(){
@@ -109,10 +109,10 @@ angular.module('fadi2.services', [])
     linkMetadata.retrieveRemoteData = function (url) {
         url = "lib/link-previewer/proxy.php?url=" + encodeURIComponent(url);
         return $http.get(url)
-        .success(function(data){
+        .then(function(result){
             //console.log ("In the Factory:");
             //console.log(data);
-            return data;
+            return result;
         });
     };
 
